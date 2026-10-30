@@ -145,7 +145,7 @@ public class RhinoManager(
         return ready;
     }
 
-    private async Task<ChildRhino> LaunchAsLeaderAsync(string version, string slotId, CancellationToken ct)
+    private Task<ChildRhino> LaunchAsLeaderAsync(string version, string slotId, CancellationToken ct)
     {
         try
         {
@@ -182,7 +182,7 @@ public class RhinoManager(
                 }
                 store.MarkReady(slotId, port, proc.Id);
                 log.LogInformation("Slot '{Slot}' ready: pid {Pid}, port {Port}", slotId, proc.Id, port);
-                return store.Get(slotId)!;
+                return Task.FromResult(store.Get(slotId)!);
             }
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
@@ -205,7 +205,7 @@ public class RhinoManager(
                 }
                 store.MarkReady(slotId, port, pid);
                 log.LogInformation("Slot '{Slot}' ready: pid {Pid}, port {Port}", slotId, pid, port);
-                return store.Get(slotId)!;
+                return Task.FromResult(store.Get(slotId)!);
             }
 
             throw new PlatformNotSupportedException($"Unsupported OS: {RuntimeInformation.OSDescription}");

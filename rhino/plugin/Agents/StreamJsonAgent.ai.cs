@@ -186,7 +186,7 @@ internal sealed class StreamJsonAgent : IAcpAgent, IDisposable
         }
     }
 
-    private async Task StartAsync(IReadOnlyList<ContentBlock> prompt)
+    private Task StartAsync(IReadOnlyList<ContentBlock> prompt)
     {
         if (!CliProcess.TryResolve(Definition.SearchPaths.GetPaths(), out string path))
             throw new FileNotFoundException(Parser.NotFoundMessage);
@@ -233,6 +233,7 @@ internal sealed class StreamJsonAgent : IAcpAgent, IDisposable
         }
         _ = Task.Run(() => ReadLoopAsync(proc.StandardOutput, proc));
 
+        return Task.CompletedTask;
     }
 
     // The runner resolves the MCP server set from AISettings (the parser stays settings-free). Each
